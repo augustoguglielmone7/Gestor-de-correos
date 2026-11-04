@@ -1,0 +1,25 @@
+{
+  "name": "gestor-de-correos",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/augustoguglielmone7/Gestor-de-correos.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/augustoguglielmone7/Gestor-de-correos/issues"
+  },
+  "homepage": "https://github.com/augustoguglielmone7/Gestor-de-correos#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^7.0.2"
+  }
+}
