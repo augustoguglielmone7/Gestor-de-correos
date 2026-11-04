@@ -32,9 +32,6 @@ export class Contacto {
         this.validarNombre(nombrecompleto);
         this.nombrecompleto = nombrecompleto.trim();
     }
-    public setEmail(email: string): void {
-        this.validarEmail(email);
-        this.email = email.trim().toLowerCase();
-    }
+   
 }
 
