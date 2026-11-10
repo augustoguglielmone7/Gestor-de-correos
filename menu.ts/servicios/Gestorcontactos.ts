@@ -17,6 +17,24 @@ export class GestorContactos {
     public buscarContactoPorEmail(email: string): Contacto | undefined {
         return this.contactos.find(c => c.getEmail() === email.trim().toLowerCase());
     }
+    public modificarContacto(
+        email: string, nuevoNombre: string, nuevoEmail: string): void {
+
+        const contacto = this.buscarContactoPorEmail(email);
+        if (!contacto) {
+            throw new Error("El contacto no existe");
+        } 
+      const emailNormalizado = nuevoEmail.trim().toLowerCase();
+      const duplicado = this.contactos.some(
+        c => c !== contacto &&
+        c.obtenerEmail() === emailNormalizado
+      );
+
+      if (duplicado) {
+        throw new Error("Ya existe otro contacto con ese email");
+     }
+
+     contacto.modificarNombre(nuevoNombre);
+     contacto.modificarEmail(nuevoEmail);
+    }
     
-
-
