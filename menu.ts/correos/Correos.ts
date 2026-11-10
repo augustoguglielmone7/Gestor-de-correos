@@ -27,4 +27,16 @@ export class Correo {
         this.fecha = new Date();
         this.favorito = false;
     }
+    public getAsunto(): string {
+        return this.asunto;
+    }
+    public getId(): number {
+        return this.id;
+    }
+    public getDestinatarios(): Contacto[] {
+        return [...this.destinatarios];
+    }
+    public getRemitente(): Contacto {
+        return this.remitente;
+    }   
 }
