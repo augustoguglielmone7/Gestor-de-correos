@@ -13,13 +13,13 @@ export class Contacto {
     }
     private validarNombre(nombrecompleto: string): void {
         if (!nombrecompleto || nombrecompleto.trim().length === 0) {
-            throw new Error("El nombre completo no puede estar vacío.");
+            throw new Error("El nombre completo no puede estar vacio.");
         }
     }
     private validarEmail(email: string): void {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            throw new Error("El email no es válido.");
+            throw new Error("El email no es valido.");
         }
     }
     public getNombreCompleto(): string {
@@ -36,5 +36,6 @@ export class Contacto {
         this.validarEmail(email);
         this.email = email.trim().toLowerCase();
     }
+
 }
 
