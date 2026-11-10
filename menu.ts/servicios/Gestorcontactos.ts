@@ -17,10 +17,6 @@ export class GestorContactos {
     public buscarContactoPorEmail(email: string): Contacto | undefined {
         return this.contactos.find(c => c.getEmail() === email.trim().toLowerCase());
     }
-    public eliminarContacto(email: string): void {
-        const contacto = this.buscarContactoPorEmail(email);
-        if (!contacto) {
-            throw new Error("El contacto no existe");
-        }
-        
+    
+
 
