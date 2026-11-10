@@ -22,3 +22,24 @@ export class GestorCorreos {
         if (correo.getDestinatarios().length === 0) {
             throw new Error("Debe existir al menos un destinatario");
         }
+        const yaEnviado = this.enviados.some(
+            enviado => enviado.getId() === correo.getId()
+        );
+        if (yaEnviado) {
+            throw new Error("El correo ya ha sido enviado");
+
+        }
+        const indice= this.borradores.findIndex(
+            borrador => borrador.getId() === correo.getId()
+        );
+        if (indice !== -1) {
+            throw new Error("El correo no esta en borradores");
+        }
+        this.enviados.push(correo);
+        this.borradores.splice(indice, 1);
+    }
+    public obtenerBorradores(): Correo[] {
+        return [...this.borradores];
+    }
+}
+
