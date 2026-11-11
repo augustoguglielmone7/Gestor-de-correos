@@ -48,4 +48,19 @@ export class Correo {
     public getFavorito(): boolean {
         return this.favorito;
     }   
+    public setAsunto(asunto: string): void {
+        this.asunto = asunto;
+    }
+    public setCuerpo(cuerpo: string): void {
+        this.cuerpo = cuerpo;
+    }
+    public setDestinatarios(destinatarios: Contacto[]): void {
+        this.destinatarios = [...destinatarios];
+    }
+    public setLeido(leido: boolean): void {
+        this.leido = leido;
+    }
+    public setFavorito(favorito: boolean): void {
+        this.favorito = favorito;
+    }
 }
