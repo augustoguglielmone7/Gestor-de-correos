@@ -25,7 +25,7 @@ export class Contacto {
     public getNombreCompleto(): string {
         return this.nombrecompleto;
     }
-    public getEmail(): string {
+    public getEmail(): string {                                                                                                                                     
         return this.email;
     }
     public setNombreCompleto(nombrecompleto: string): void {
