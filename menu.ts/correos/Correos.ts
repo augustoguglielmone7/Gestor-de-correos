@@ -38,5 +38,14 @@ export class Correo {
     }
     public getRemitente(): Contacto {
         return this.remitente;
+    }
+    public getCuerpo(): string {
+        return this.cuerpo;
+    }
+    public getLeido(): boolean {
+        return this.leido;
+    }
+    public getFavorito(): boolean {
+        return this.favorito;
     }   
 }
