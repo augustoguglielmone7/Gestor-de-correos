@@ -14,27 +14,38 @@ export class GestorContactos {
     public obtenerContactos(): Contacto[] {
         return [...this.contactos];
     }
-    public buscarContactoPorEmail(email: string): Contacto | undefined {
+    public buscarContacto (email: string): Contacto | undefined {
         return this.contactos.find(c => c.getEmail() === email.trim().toLowerCase());
     }
     public modificarContacto(
-        email: string, nuevoNombre: string, nuevoEmail: string): void {
+        emailActual: string, 
+        nuevoNombre: string,
+       nuevoEmail: string
+    ): void {
 
-        const contacto = this.buscarContactoPorEmail(email);
+        const contacto = this.buscarContacto(emailActual);
         if (!contacto) {
             throw new Error("El contacto no existe");
         } 
       const emailNormalizado = nuevoEmail.trim().toLowerCase();
       const duplicado = this.contactos.some(
         c => c !== contacto &&
-        c.obtenerEmail() === emailNormalizado
+        c.getEmail() === emailNormalizado
       );
 
       if (duplicado) {
         throw new Error("Ya existe otro contacto con ese email");
      }
 
-     contacto.modificarNombre(nuevoNombre);
-     contacto.modificarEmail(nuevoEmail);
+     contacto.setNombreCompleto(nuevoNombre);
+     contacto.setEmail(nuevoEmail);
     }
     
+    public eliminarContacto (email: string): void {
+        const contacto = this.buscarContacto(email);
+        if (!contacto) {
+            throw new Error("El contacto no existe");
+        }
+        this.contactos = this.contactos.filter(c => c !== contacto);
+    }
+}
