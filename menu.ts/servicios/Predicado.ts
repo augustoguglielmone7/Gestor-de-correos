@@ -41,3 +41,18 @@ import {Correo} from "../correos/Correos";
         esLeido, 
         esNoLeido
     );
+    export const noFavoritos = combinarNOT(esFavorito);
+    
+    export const asuntoContiene = (texto: string) => {
+          return (correo: Correo): boolean =>
+              correo.getAsunto().toLowerCase().includes(texto.toLowerCase());
+    };
+
+    export const cuerpoContiene = (texto: string) => {
+          return (correo: Correo): boolean =>
+              correo.getCuerpo().toLowerCase().includes(texto.toLowerCase());
+    };
+    export const urgenteOReuniones = combinarOR(
+        asuntoContiene("urgente"),
+        asuntoContiene("reunión")
+    );
