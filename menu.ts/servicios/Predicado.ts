@@ -37,7 +37,7 @@ import {Correo} from "../correos/Correos";
         esFavorito, 
         esNoLeido
     );
-    export const favoritosONoLeidos = combinarOR(
-        esFavorito, 
+    export const todosLosCorreos = combinarOR(
+        esLeido, 
         esNoLeido
     );
