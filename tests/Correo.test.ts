@@ -1,5 +1,4 @@
-import { describe, it } from "node:test";
-import assert from "node:assert/strict";
+import { describe,expect, test} from "vitest";
 import { Contacto } from "../menu.ts/correos/Contacto";
 import { Correo } from "../menu.ts/correos/Correos";
 
@@ -9,57 +8,57 @@ describe("RF-01: creacion de correos", () => {
     const luis = new Contacto("Luis Perez", "luis@gmail.com");
     const marta = new Contacto("Marta Diaz", "marta@gmail.com");
 
-    it("guarda los datos con los que se crea", () => {
+    test("guarda los datos con los que se crea", () => {
         const correo = new Correo("El examen es el lunes", "Examen final", 1, [luis, marta], ana);
 
-        assert.equal(correo.getId(), 1);
-        assert.equal(correo.getAsunto(), "Examen final");
-        assert.equal(correo.getCuerpo(), "El examen es el lunes");
-        assert.equal(correo.getRemitente(), ana);
-        assert.deepEqual(correo.getDestinatarios(), [luis, marta]);
+        expect(correo.getId()).toEqual(1);
+        expect(correo.getAsunto()).toEqual("Examen final");
+        expect(correo.getCuerpo()).toEqual("El examen es el lunes");
+        expect(correo.getRemitente()).toEqual(ana);
+        expect(correo.getDestinatarios()).toEqual([luis, marta]);
     });
 
-    it("empieza como no leido y sin ser favorito", () => {
+    test("empieza como no leido y sin ser favorito", () => {
         const correo = new Correo("Como estas", "Hola", 1, [luis], ana);
 
-        assert.equal(correo.getLeido(), false);
-        assert.equal(correo.getFavorito(), false);
+        expect(correo.getLeido()).toEqual(false);
+        expect(correo.getFavorito()).toEqual(false);
     });
 
-    it("dos correos se distinguen por su id", () => {
+    test("dos correos se distinguen por su id", () => {
         const correo1 = new Correo("Como estas", "Hola", 1, [luis], ana);
         const correo2 = new Correo("Como estas", "Hola", 2, [luis], ana);
 
-        assert.notEqual(correo1.getId(), correo2.getId());
+        expect(correo1.getId()).not.toEqual(correo2.getId());
     });
 
-    it("no se pueden modificar los destinatarios desde afuera", () => {
+    test("no se pueden modificar los destinatarios desde afuera", () => {
         const correo = new Correo("Como estas", "Hola", 1, [luis], ana);
 
         correo.getDestinatarios().push(marta);
 
-        assert.deepEqual(correo.getDestinatarios(), [luis]);
+        expect(correo.getDestinatarios()).toEqual([luis]);
     });
 
-    it("se pueden cambiar el asunto, el cuerpo y los destinatarios", () => {
+    test("se pueden cambiar el asunto, el cuerpo y los destinatarios", () => {
         const correo = new Correo("", "", 1, [], ana);
 
         correo.setAsunto("Reunion");
         correo.setCuerpo("Nos juntamos el martes");
         correo.setDestinatarios([luis]);
 
-        assert.equal(correo.getAsunto(), "Reunion");
-        assert.equal(correo.getCuerpo(), "Nos juntamos el martes");
-        assert.deepEqual(correo.getDestinatarios(), [luis]);
+        expect(correo.getAsunto()).toEqual("Reunion");
+        expect(correo.getCuerpo()).toEqual("Nos juntamos el martes");
+        expect(correo.getDestinatarios()).toEqual([luis]);
     });
 
-    it("se puede marcar como leido y como favorito", () => {
+    test("se puede marcar como leido y como favorito", () => {
         const correo = new Correo("Como estas", "Hola", 1, [luis], ana);
 
         correo.setLeido(true);
         correo.setFavorito(true);
 
-        assert.equal(correo.getLeido(), true);
-        assert.equal(correo.getFavorito(), true);
+        expect(correo.getLeido()).toEqual(true);
+        expect(correo.getFavorito()).toEqual(true);
     });
 });

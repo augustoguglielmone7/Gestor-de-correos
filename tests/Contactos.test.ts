@@ -1,5 +1,4 @@
-import { describe, it, beforeEach } from "node:test";
-import assert from "node:assert/strict";
+import { describe, expect, test, beforeEach } from "vitest";
 import { Contacto } from "../menu.ts/correos/Contacto";
 import { Correo } from "../menu.ts/correos/Correos";
 import { GestorContactos } from "../menu.ts/servicios/Gestorcontactos";
@@ -15,55 +14,55 @@ describe("RF-03: gestion de contactos", () => {
         gestor.agregarContacto(ana);
     });
 
-    it("no se puede crear un contacto con un email invalido", () => {
-        assert.throws(() => new Contacto("Ana Gomez", "ana.ucp.edu.ar"));
-        assert.throws(() => new Contacto("Ana Gomez", "ana@ucp"));
+    test("no se puede crear un contacto con un email invalido", () => {
+        expect(() => new Contacto("Ana Gomez", "ana.ucp.edu.ar")).toThrow("El email no es valido.");
+        expect(() => new Contacto("Ana Gomez", "ana@ucp")).toThrow("El email no es valido.");
     });
 
-    it("agrega contactos y los devuelve", () => {
+    test("agrega contactos y los devuelve", () => {
         const luis = new Contacto("Luis Perez", "luis@gmail.com");
         gestor.agregarContacto(luis);
 
-        assert.deepEqual(gestor.obtenerContactos(), [ana, luis]);
+        expect(gestor.obtenerContactos()).toEqual([ana, luis]);
     });
 
-    it("busca un contacto por su email", () => {
-        assert.equal(gestor.buscarContacto("ANA@ucp.edu.ar"), ana);
-        assert.equal(gestor.buscarContacto("nadie@gmail.com"), undefined);
+    test("busca un contacto por su email", () => {
+        expect(gestor.buscarContacto("ANA@ucp.edu.ar")).toEqual(ana);
+        expect(gestor.buscarContacto("nadie@gmail.com")).toBeUndefined();
     });
 
-    it("no permite dos contactos con el mismo email", () => {
+    test("no permite dos contactos con el mismo email", () => {
         const repetido = new Contacto("Otra Ana", "Ana@UCP.edu.ar");
 
-        assert.throws(() => gestor.agregarContacto(repetido));
-        assert.equal(gestor.obtenerContactos().length, 1);
+        expect(() => gestor.agregarContacto(repetido)).toThrow("Ya existe un contacto con ese email.");
+        expect(gestor.obtenerContactos().length).toEqual(1);
     });
 
-    it("modifica el nombre y el email de un contacto", () => {
+    test("modifica el nombre y el email de un contacto", () => {
         gestor.modificarContacto("ana@ucp.edu.ar", "Ana Maria Gomez", "anamaria@ucp.edu.ar");
 
-        assert.equal(ana.getNombreCompleto(), "Ana Maria Gomez");
-        assert.equal(ana.getEmail(), "anamaria@ucp.edu.ar");
+        expect(ana.getNombreCompleto()).toEqual("Ana Maria Gomez");
+        expect(ana.getEmail()).toEqual("anamaria@ucp.edu.ar");
     });
 
-    it("no deja modificar el email por uno que ya usa otro contacto", () => {
+    test("no deja modificar el email por uno que ya usa otro contacto", () => {
         gestor.agregarContacto(new Contacto("Luis Perez", "luis@gmail.com"));
 
-        assert.throws(() => gestor.modificarContacto("ana@ucp.edu.ar", "Ana Gomez", "luis@gmail.com"));
+        expect(() => gestor.modificarContacto("ana@ucp.edu.ar", "Ana Gomez", "luis@gmail.com")).toThrow("Ya existe un contacto con ese email.");
     });
 
-    it("elimina un contacto", () => {
+    test("elimina un contacto", () => {
         gestor.eliminarContacto("ana@ucp.edu.ar");
 
-        assert.deepEqual(gestor.obtenerContactos(), []);
+        expect(gestor.obtenerContactos()).toEqual([]);
     });
 
-    it("eliminar un contacto no borra los correos donde aparece", () => {
+    test("eliminar un contacto no borra los correos donde aparece", () => {
         const luis = new Contacto("Luis Perez", "luis@gmail.com");
         const correo = new Correo("Como estas", "Hola", 1, [luis], ana);
 
         gestor.eliminarContacto("ana@ucp.edu.ar");
 
-        assert.equal(correo.getRemitente(), ana);
+        expect(correo.getRemitente()).toEqual(ana);
     });
 });
