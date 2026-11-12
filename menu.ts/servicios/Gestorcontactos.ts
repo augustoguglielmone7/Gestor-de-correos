@@ -7,7 +7,7 @@ export class GestorContactos {
      const existe = this.contactos.some
         (c => c.getEmail() === contacto.getEmail()
      );
-     if (existe) {throw new Error("Ya existe un contacto con ese email");
+     if (existe) {throw new Error("Ya existe un contacto con ese email.");
      }
      this.contactos.push(contacto)
     };
@@ -34,7 +34,7 @@ export class GestorContactos {
       );
 
       if (duplicado) {
-        throw new Error("Ya existe otro contacto con ese email");
+        throw new Error("Ya existe un contacto con ese email.");
      }
 
      contacto.setNombreCompleto(nuevoNombre);
