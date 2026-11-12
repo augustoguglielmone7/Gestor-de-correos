@@ -2,6 +2,8 @@
 import { describe, test, expect } from "vitest";
 import { GestorFiltros } from "../menu.ts/servicios/Gestordefiltros";
 import { Filtro } from "../menu.ts/correos/Filtro";
+import { Correo } from "../menu.ts/correos/Correos";
+import { Contacto } from "../menu.ts/correos/Contacto";
 
 describe("RF-05: gestión de filtros", () => {
 
@@ -59,6 +61,44 @@ describe("RF-05: gestión de filtros", () => {
 
          expect(() => gestor.aplicarFiltro("Inexistente", []))
              .toThrow("El filtro no existe.");
+   });
+    test("devuelve solamente los correos favoritos", () => {
+         const gestor = new GestorFiltros();
+
+         const contacto = new Contacto("Ana Gomez", "ana@gmail.com");
+
+         const correoFavorito = new Correo(
+              "Contenido 1",
+              "Reunión",
+              1,
+              [contacto],
+              contacto
+        );
+
+        const correoNormal = new Correo(
+             "Contenido 2",
+             "Trabajo",
+             2,
+             [contacto],
+             contacto
+        );
+
+        correoFavorito.setFavorito(true);
+
+             const filtro = new Filtro(
+             "Favoritos",
+             correo => correo.getFavorito()
+        );
+
+        gestor.agregarFiltro(filtro);
+
+        const resultado = gestor.aplicarFiltro(
+             "Favoritos",
+             [correoFavorito, correoNormal]
+        );
+
+        expect(resultado).toHaveLength(1);
+        expect(resultado[0]?.getId()).toBe(1);
    });
 
 });
