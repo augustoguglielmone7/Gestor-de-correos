@@ -66,5 +66,40 @@ describe("RF-06 gestión de carpetas", () => {
         expect(() => gestor.moverA(99, "eliminados"))
             .toThrow("El correo no existe.");
     });
+    test("Permite restaurar un correo de eliminados a recibidos", () => {
+        const gestor = new GestorCarpetas();
+        const contacto = new Contacto("Ana", "ana@gmail.com");
 
+        const correo = new Correo(
+            "Hola",
+            "Saludo",
+            1,
+            [contacto],
+            contacto
+        );
+
+        gestor.agregarRecibido(correo);
+        gestor.moverA(1, "eliminados");
+        gestor.moverA(1, "recibidos");
+
+        expect(gestor.obtenerCarpeta("recibidos")).toHaveLength(1);
+        expect(gestor.obtenerCarpeta("eliminados")).toHaveLength(0);
+    });
+    test("No permitir mover a una carpeta inexistente", () => {
+        const gestor = new GestorCarpetas();
+        const contacto = new Contacto("Ana", "ana@gmail.com");
+
+        const correo = new Correo(
+            "Hola",
+            "Saludo",
+            1,
+            [contacto],
+            contacto
+        );
+
+        gestor.agregarRecibido(correo);
+
+        expect(() => gestor.moverA(1, "inexistente"))
+            .toThrow("La carpeta de destino no existe.");
+    });
 });
