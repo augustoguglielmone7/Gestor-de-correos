@@ -41,3 +41,30 @@ describe("RF-06 gestión de carpetas", () => {
             .toThrow("El correo ya está registrado.");
     });
 
+    test("permite mover un correo a eliminados", () => {
+        const gestor = new GestorCarpetas();
+        const contacto = new Contacto("Ana", "ana@gmail.com");
+
+        const correo = new Correo(
+            "Hola",
+            "Saludo",
+            1,
+            [contacto],
+            contacto
+        );
+
+        gestor.agregarRecibido(correo);
+        gestor.moverA(1, "eliminados");
+
+        expect(gestor.obtenerCarpeta("recibidos")).toHaveLength(0);
+        expect(gestor.obtenerCarpeta("eliminados")).toHaveLength(1);
+    });
+
+    test("no permite mover un correo inexistente", () => {
+        const gestor = new GestorCarpetas();
+
+        expect(() => gestor.moverA(99, "eliminados"))
+            .toThrow("El correo no existe.");
+    });
+
+});
