@@ -46,5 +46,19 @@ describe("RF-05: gestión de filtros", () => {
 
         expect(gestor.obtenerFiltros().length).toBe(1);
     });
+    test("aplica un filtro y devuelve solo los correos que cumplen la condición", () => {
+        const gestor = new GestorFiltros();
+
+        const filtro = new Filtro("Favoritos", correo => correo.getFavorito());
+
+        gestor.agregarFiltro(filtro);
+    });
+
+    test("lanza un error cuando se intenta aplicar un filtro inexistente", () => {
+         const gestor = new GestorFiltros();
+
+         expect(() => gestor.aplicarFiltro("Inexistente", []))
+             .toThrow("El filtro no existe.");
+   });
 
 });

@@ -1,4 +1,5 @@
 
+import { Correo } from "../correos/Correos";
 import { Filtro } from "../correos/Filtro";
 
 export class GestorFiltros {
@@ -20,5 +21,17 @@ export class GestorFiltros {
 
     public obtenerFiltros(): Filtro[] {
         return [...this.filtros];
+    }
+    public aplicarFiltro(nombre: string, correos: Correo[]): Correo[] {
+
+    const filtro = this.filtros.find(
+        f => f.getNombre() === nombre
+    );
+
+    if (!filtro) {
+        throw new Error("El filtro no existe.");
+    }
+
+    return correos.filter(correo => filtro.aplicar(correo));
     }
 }
