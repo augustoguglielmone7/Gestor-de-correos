@@ -100,5 +100,89 @@ describe("RF-05: gestión de filtros", () => {
         expect(resultado).toHaveLength(1);
         expect(resultado[0]?.getId()).toBe(1);
    });
+   test("no modifica la lista original de correos", () => {
+          const gestor = new GestorFiltros();
+
+          const contacto = new Contacto("Ana Gomez", "ana@gmail.com");
+
+          const correo = new Correo(
+              "Contenido",
+              "Reunión",
+               1,
+              [contacto],
+              contacto
+            );
+
+            const filtro = new Filtro(
+                 "Favoritos",
+                 correo => correo.getFavorito()
+            );
+
+            gestor.agregarFiltro(filtro);
+
+            const correos = [correo];
+
+            gestor.aplicarFiltro("Favoritos", correos);
+
+            expect(correos).toHaveLength(1);
+    });
+    test("combina condiciones con AND", () => {
+        const contacto = new Contacto("Ana", "ana@gmail.com");
+
+        const correo = new Correo(
+                 "Contenido",
+                  "Reunión",
+                   1,
+                  [contacto],
+                  contacto
+        );
+
+        correo.setFavorito(true);
+
+        const filtro = new Filtro(
+             "Favoritos no leídos",
+             correo => correo.getFavorito() && !correo.getLeido()
+        );
+
+        expect(filtro.aplicar(correo)).toBe(true);
+    });
+    test("combina condiciones con OR", () => {
+        const contacto = new Contacto("Ana", "ana@gmail.com");
+
+        const correo = new Correo(
+             "Contenido",
+             "Reunión",
+             2,
+             [contacto],
+             contacto
+       );
+
+       correo.setFavorito(true);
+
+       const filtro = new Filtro(
+             "Favoritos o leídos",
+              correo => correo.getFavorito() || correo.getLeido()
+        );
+
+        expect(filtro.aplicar(correo)).toBe(true);
+    });
+    test("combina condiciones con NOT", () => {
+        const contacto = new Contacto("Ana", "ana@gmail.com");
+
+        const correo = new Correo(
+             "Contenido",
+             "Trabajo",
+              3,
+             [contacto],
+             contacto
+        );
+
+        const filtro = new Filtro(
+             "No favoritos",
+              correo => !correo.getFavorito()
+       );
+
+       expect(filtro.aplicar(correo)).toBe(true);
+    });
 
 });
