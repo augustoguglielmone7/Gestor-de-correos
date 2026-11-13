@@ -21,6 +21,41 @@ describe("RF-07: gestión de borradores", () => {
 
         expect(gestor.obtenerBorradores()).toHaveLength(1);
     });
+    test("permite recuperar los borradores guardados", () => {
+        const gestor = new GestorCorreos();
+        const contacto = new Contacto("Ana", "ana@gmail.com");
+
+        const correo = new Correo(
+            "Hola",
+            "Saludo",
+            2,
+            [contacto],
+            contacto
+        );
+
+        gestor.guardarBorrador(correo);
+
+        expect(gestor.obtenerBorradores()[0]?.getAsunto())
+            .toBe("Saludo");
+    });
+
+    test("no permite enviar un correo sin asunto", () => {
+        const gestor = new GestorCorreos();
+        const contacto = new Contacto("Ana", "ana@gmail.com");
+
+        const correo = new Correo(
+            "Hola",
+            "",
+            3,
+            [contacto],
+            contacto
+        );
+
+        gestor.guardarBorrador(correo);
+
+        expect(() => gestor.enviarCorreo(correo))
+            .toThrow("El asunto es obligatorio");
+    });
 
 
     test("no permite enviar un correo sin destinatarios", () => {
