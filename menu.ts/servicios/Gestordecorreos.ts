@@ -48,5 +48,8 @@ export class GestorCorreos {
     public obtenerBorradores(): Correo[] {
         return [...this.borradores];
     }
+    public obtenerEnviados(): Correo[] {
+        return [...this.enviados];
+    }
 }
 
