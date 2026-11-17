@@ -76,5 +76,15 @@ export class GestorCorreos {
         borrador.setCuerpo(cuerpo);
         borrador.setDestinatarios(destinatarios);
     }
+    public agregarFavorito(correo: Correo): void {
+
+    const existe = this.favoritos.some(
+        favorito => favorito.getId() === correo.getId()
+    );
+
+    if (!existe) {
+        this.favoritos.push(correo);
+    }
+}
 }
 
