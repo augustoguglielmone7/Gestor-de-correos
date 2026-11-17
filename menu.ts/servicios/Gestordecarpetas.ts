@@ -1,7 +1,7 @@
 
 
 import { Correo } from "../correos/Correos";
-import { contieneTexto, esNoLeido } from "./Predicado";
+import { contieneTexto, esFavorito, esNoLeido } from "./Predicado";
 
 export class GestorCarpetas {
 
@@ -85,6 +85,14 @@ export class GestorCarpetas {
         return this.obtenerCarpeta(nombre).filter(esNoLeido);
     }
 
+    public obtenerFavoritos(): Correo[] {
+        return [
+            ...this.recibidos,
+            ...this.enviados,
+            ...this.borradores
+        ].filter(esFavorito);
+    }
+
     public eliminar(correoId: number): void {
         const origen = this.buscarCarpetaDe(correoId);
 
@@ -139,3 +147,4 @@ export class GestorCarpetas {
         return nombre;
     }
 }
+
