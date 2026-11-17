@@ -111,4 +111,79 @@ describe("RF-07: gestión de borradores", () => {
         expect(() => gestor.enviarCorreo(correo))
             .toThrow("El correo ya ha sido enviado");
     });
+    describe("RF-08: gestión de favoritos", () => {
+
+    test("permite agregar un correo a favoritos", () => {
+        const gestor = new GestorCorreos();
+        const contacto = new Contacto("Ana", "ana@gmail.com");
+
+        const correo = new Correo(
+            "Hola",
+            "Saludo",
+            6,
+            [contacto],
+            contacto
+        );
+
+        gestor.agregarFavorito(correo);
+
+        expect(gestor.obtenerFavoritos()).toHaveLength(1);
+    });
+
+    test("no mueve el correo de su bandeja original al marcarlo como favorito", () => {
+        const gestor = new GestorCorreos();
+        const contacto = new Contacto("Ana", "ana@gmail.com");
+
+        const correo = new Correo(
+            "Hola",
+            "Saludo",
+            7,
+            [contacto],
+            contacto
+        );
+
+        gestor.enviarCorreo(correo);
+        gestor.agregarFavorito(correo);
+
+        expect(gestor.obtenerEnviados()).toHaveLength(1);
+        expect(gestor.obtenerFavoritos()).toHaveLength(1);
+    });
+
+    test("no permite agregar dos veces el mismo correo a favoritos", () => {
+        const gestor = new GestorCorreos();
+        const contacto = new Contacto("Ana", "ana@gmail.com");
+
+        const correo = new Correo(
+            "Hola",
+            "Saludo",
+            8,
+            [contacto],
+            contacto
+        );
+
+        gestor.agregarFavorito(correo);
+        gestor.agregarFavorito(correo);
+
+        expect(gestor.obtenerFavoritos()).toHaveLength(1);
+    });
+
+    test("permite quitar un correo de favoritos", () => {
+        const gestor = new GestorCorreos();
+        const contacto = new Contacto("Ana", "ana@gmail.com");
+
+        const correo = new Correo(
+            "Hola",
+            "Saludo",
+            9,
+            [contacto],
+            contacto
+        );
+
+        gestor.agregarFavorito(correo);
+        gestor.quitarFavorito(correo);
+
+        expect(gestor.obtenerFavoritos()).toHaveLength(0);
+    });
+
+});
 });
