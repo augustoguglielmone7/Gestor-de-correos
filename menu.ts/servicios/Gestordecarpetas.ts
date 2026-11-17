@@ -1,5 +1,6 @@
 
 import { Correo } from "../correos/Correos";
+import { contieneTexto } from "./Predicado";
 
 export class GestorCarpetas {
 
@@ -72,6 +73,10 @@ export class GestorCarpetas {
         }
 
         return [...carpeta];
+    }
+
+    public buscar(texto: string): Correo[] {
+        return this.recibidos.filter(contieneTexto(texto));
     }
 
     private verificarDuplicado(correo: Correo): void {
