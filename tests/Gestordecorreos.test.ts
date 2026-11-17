@@ -185,5 +185,23 @@ describe("RF-07: gestión de borradores", () => {
         expect(gestor.obtenerFavoritos()).toHaveLength(0);
     });
 
-});
+    });
+    test("no mueve un correo recibido de su bandeja original al marcarlo como favorito", () => {
+       const gestor = new GestorCorreos();
+        const contacto = new Contacto("Ana", "ana@gmail.com");
+
+       const correo = new Correo(
+         "Hola",
+         "Saludo",
+         10,
+         [contacto],
+         contacto
+        );
+
+        gestor.recibirCorreo(correo);
+       gestor.agregarFavorito(correo);
+
+       expect(gestor.obtenerRecibidos()).toHaveLength(1);
+       expect(gestor.obtenerFavoritos()).toHaveLength(1);
+    });
 });
