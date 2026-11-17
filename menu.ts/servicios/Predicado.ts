@@ -57,7 +57,8 @@ import {Contacto} from "../correos/Contacto";
         asuntoContiene("urgente"),
         asuntoContiene("reunión")
     );
-        const contactoContiene = (contacto: Contacto, texto: string): boolean => {
+
+    const contactoContiene = (contacto: Contacto, texto: string): boolean => {
         return contacto.getNombreCompleto().toLowerCase().includes(texto.toLowerCase()) ||
             contacto.getEmail().includes(texto.toLowerCase());
     };
@@ -77,4 +78,35 @@ import {Contacto} from "../correos/Contacto";
               combinarOR(asuntoContiene(texto), cuerpoContiene(texto)),
               combinarOR(remitenteContiene(texto), destinatarioContiene(texto))
           );
+    };
+
+    export const remitenteDelDominio = (dominio: string) => {
+          return (correo: Correo): boolean =>
+              correo.getRemitente().getEmail().endsWith(dominio.toLowerCase());
+    };
+
+    export const enviadoPor = (email: string) => {
+          return (correo: Correo): boolean =>
+              correo.getRemitente().getEmail() === email.trim().toLowerCase();
+    };
+
+    export const correosUcp = remitenteDelDominio("@ucp.edu.ar");
+
+    export const academicosImportantes = combinarAND(
+        correosUcp,
+        asuntoContiene("examen")
+    );
+
+    export const pendientesDeRevision = combinarAND(
+        esNoLeido,
+        cuerpoContiene("entrega")
+    );
+
+    export const paraSeguimiento = combinarAND(
+        combinarOR(asuntoContiene("proyecto"), asuntoContiene("reunion")),
+        combinarNOT(esLeido)
+    );
+
+    export const personalesPrioritarios = (email: string) => {
+          return combinarAND(esFavorito, enviadoPor(email));
     };
