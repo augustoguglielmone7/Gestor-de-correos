@@ -141,7 +141,7 @@ describe("RF-07: gestión de borradores", () => {
             [contacto],
             contacto
         );
-
+        gestor.guardarBorrador(correo);
         gestor.enviarCorreo(correo);
         gestor.agregarFavorito(correo);
 
