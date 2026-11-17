@@ -204,4 +204,24 @@ describe("RF-07: gestión de borradores", () => {
        expect(gestor.obtenerRecibidos()).toHaveLength(1);
        expect(gestor.obtenerFavoritos()).toHaveLength(1);
     });
+    test("quitar un favorito no elimina el correo de enviados", () => {
+        const gestor = new GestorCorreos();
+        const contacto = new Contacto("Ana", "ana@gmail.com");
+
+        const correo = new Correo(
+          "Hola",
+           "Saludo",
+           11,
+           [contacto],
+           contacto
+       );
+
+       gestor.guardarBorrador(correo);
+       gestor.enviarCorreo(correo);
+       gestor.agregarFavorito(correo);
+       gestor.quitarFavorito(correo);
+
+       expect(gestor.obtenerFavoritos()).toHaveLength(0);
+       expect(gestor.obtenerEnviados()).toHaveLength(1);
+   }); 
 });
