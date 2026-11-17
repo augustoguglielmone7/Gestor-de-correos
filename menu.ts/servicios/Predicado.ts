@@ -1,4 +1,5 @@
 import {Correo} from "../correos/Correos";
+import {Contacto} from "../correos/Contacto";
 
     export const esFavorito = (correo: Correo): boolean => {
         return correo.getFavorito();
@@ -56,3 +57,24 @@ import {Correo} from "../correos/Correos";
         asuntoContiene("urgente"),
         asuntoContiene("reunión")
     );
+        const contactoContiene = (contacto: Contacto, texto: string): boolean => {
+        return contacto.getNombreCompleto().toLowerCase().includes(texto.toLowerCase()) ||
+            contacto.getEmail().includes(texto.toLowerCase());
+    };
+
+    export const remitenteContiene = (texto: string) => {
+          return (correo: Correo): boolean =>
+              contactoContiene(correo.getRemitente(), texto);
+    };
+
+    export const destinatarioContiene = (texto: string) => {
+          return (correo: Correo): boolean =>
+              correo.getDestinatarios().some(d => contactoContiene(d, texto));
+    };
+
+    export const contieneTexto = (texto: string) => {
+          return combinarOR(
+              combinarOR(asuntoContiene(texto), cuerpoContiene(texto)),
+              combinarOR(remitenteContiene(texto), destinatarioContiene(texto))
+          );
+    };
