@@ -1,4 +1,5 @@
 import { Correo } from "../correos/Correos";
+import { Contacto } from "../correos/Contacto";
 
 export class GestorCorreos {
 
@@ -51,6 +52,29 @@ export class GestorCorreos {
     }
     public obtenerEnviados(): Correo[] {
         return [...this.enviados];
+    }
+    public obtenerBorrador(correoId: number): Correo {
+        const borrador = this.borradores.find(
+             borrador => borrador.getId() === correoId
+        );
+
+        if (!borrador) {
+             throw new Error("El borrador no existe");
+        }
+
+        return borrador;
+    }
+    public editarBorrador(
+        correoId: number,
+        asunto: string,
+        cuerpo: string,
+        destinatarios: Contacto[]
+    ): void {
+        const borrador = this.obtenerBorrador(correoId);
+
+        borrador.setAsunto(asunto);
+        borrador.setCuerpo(cuerpo);
+        borrador.setDestinatarios(destinatarios);
     }
 }
 
