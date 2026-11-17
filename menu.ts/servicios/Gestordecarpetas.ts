@@ -1,4 +1,5 @@
 
+
 import { Correo } from "../correos/Correos";
 import { contieneTexto } from "./Predicado";
 
@@ -8,6 +9,7 @@ export class GestorCarpetas {
     private enviados: Correo[] = [];
     private borradores: Correo[] = [];
     private eliminados: Correo[] = [];
+    private origenes: Record<number, string> = {};
 
     public agregarRecibido(correo: Correo): void {
         this.verificarDuplicado(correo);
@@ -79,6 +81,28 @@ export class GestorCarpetas {
         return this.recibidos.filter(contieneTexto(texto));
     }
 
+    public eliminar(correoId: number): void {
+        const origen = this.buscarCarpetaDe(correoId);
+
+        if (origen === "eliminados") {
+            throw new Error("El correo ya esta eliminado.");
+        }
+
+        this.moverA(correoId, "eliminados");
+        this.origenes[correoId] = origen;
+    }
+
+    public restaurar(correoId: number): void {
+        const origen = this.origenes[correoId];
+
+        if (this.buscarCarpetaDe(correoId) !== "eliminados" || !origen) {
+            throw new Error("El correo no esta en eliminados.");
+        }
+
+        this.moverA(correoId, origen);
+        delete this.origenes[correoId];
+    }
+
     private verificarDuplicado(correo: Correo): void {
         const todas = [
             ...this.recibidos,
@@ -90,5 +114,24 @@ export class GestorCarpetas {
         if (todas.some(c => c.getId() === correo.getId())) {
             throw new Error("El correo ya está registrado.");
         }
+    }
+
+    private buscarCarpetaDe(correoId: number): string {
+        const carpetas: Record<string, Correo[]> = {
+            recibidos: this.recibidos,
+            enviados: this.enviados,
+            borradores: this.borradores,
+            eliminados: this.eliminados
+        };
+
+        const nombre = Object.keys(carpetas).find(carpeta =>
+            carpetas[carpeta]?.some(correo => correo.getId() === correoId)
+        );
+
+        if (!nombre) {
+            throw new Error("El correo no existe.");
+        }
+
+        return nombre;
     }
 }
