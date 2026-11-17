@@ -4,6 +4,7 @@ export class GestorCorreos {
 
     private borradores: Correo[] = [];
     private enviados: Correo[] = [];
+    private favoritos: Correo[] = [];
 
     public guardarBorrador(correo: Correo): void {
         this.borradores.push(correo);
