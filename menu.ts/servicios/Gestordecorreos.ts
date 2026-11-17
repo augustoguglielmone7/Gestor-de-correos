@@ -78,13 +78,24 @@ export class GestorCorreos {
     }
     public agregarFavorito(correo: Correo): void {
 
-    const existe = this.favoritos.some(
+      const existe = this.favoritos.some(
         favorito => favorito.getId() === correo.getId()
-    );
+      );
 
-    if (!existe) {
+      if (!existe) {
         this.favoritos.push(correo);
+      }
     }
-}
+    public quitarFavorito(correo: Correo): void {
+
+    this.favoritos = this.favoritos.filter(
+        favorito => favorito.getId() !== correo.getId()
+    );
+    }
+    public obtenerFavoritos(): Correo[] {
+    return [...this.favoritos];
+    }
+
+
 }
 
