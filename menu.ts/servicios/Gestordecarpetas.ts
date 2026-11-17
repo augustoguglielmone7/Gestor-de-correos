@@ -1,7 +1,7 @@
 
 
 import { Correo } from "../correos/Correos";
-import { contieneTexto } from "./Predicado";
+import { contieneTexto, esNoLeido } from "./Predicado";
 
 export class GestorCarpetas {
 
@@ -79,6 +79,10 @@ export class GestorCarpetas {
 
     public buscar(texto: string): Correo[] {
         return this.recibidos.filter(contieneTexto(texto));
+    }
+
+    public obtenerNoLeidos(nombre: string): Correo[] {
+        return this.obtenerCarpeta(nombre).filter(esNoLeido);
     }
 
     public eliminar(correoId: number): void {
