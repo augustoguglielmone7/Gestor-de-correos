@@ -23,5 +23,9 @@ describe("RF-08 - Lectura de correos", () => {
         correo.setLeido(true);
         expect(esLeido(correo)).toBe(true); 
     });
+    test("Un correo marcado como leido ya no debe ser leido", () => {
+        correo.setLeido(false);
+        expect(esNoLeido(correo)).toBe(true);
+    });
     
 });
