@@ -102,7 +102,10 @@ export class GestorCorreos {
 
     public obtenerRecibidos(): Correo[] {
          return [...this.recibidos];
- }
+    }
+    public getEnviados(): Correo[] {
+        return this.enviados;
+    }
 
 
 }

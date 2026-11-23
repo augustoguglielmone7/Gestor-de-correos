@@ -102,4 +102,34 @@ describe("RF-06 gestión de carpetas", () => {
         expect(() => gestor.moverA(1, "inexistente"))
             .toThrow("La carpeta de destino no existe.");
     });
+    test("cada usuario tiene sus propias bandejas", () => {
+       const bandejaUsuario1 = new GestorCarpetas();
+       const bandejaUsuario2 = new GestorCarpetas();
+
+       const remitente = new Contacto("Juan Pérez", "juan@gmail.com");
+       const usuario1 = new Contacto("Juana López", "juana@gmail.com");
+       const usuario2 = new Contacto("Pedro Gómez", "pedro@gmail.com");
+
+       const correo1 = new Correo(
+          "Mensaje para Juana",
+           "Hola Juana",
+           1,
+           [usuario1],
+           remitente
+        );
+
+        const correo2 = new Correo(
+          "Mensaje para Pedro",
+           "Hola Pedro",
+           2,
+           [usuario2],
+           remitente
+        );
+
+        bandejaUsuario1.agregarRecibido(correo1);
+        bandejaUsuario2.agregarRecibido(correo2);
+
+        expect(bandejaUsuario1.obtenerCarpeta("recibidos")).toEqual([correo1]);
+        expect(bandejaUsuario2.obtenerCarpeta("recibidos")).toEqual([correo2]);
+    });
 });

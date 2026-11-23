@@ -148,6 +148,24 @@ describe("RF-07: gestión de borradores", () => {
         expect(gestor.obtenerEnviados()).toHaveLength(1);
         expect(gestor.obtenerFavoritos()).toHaveLength(1);
     });
+    test("permite enviar un correo a varios destinatarios", () => {
+        const gestor = new GestorCorreos();
+        const contacto1 = new Contacto("Juan", "juan@gmail.com");
+        const contacto2 = new Contacto("Pedro", "pedro@gmail.com");
+        const contacto3 = new Contacto("Maria", "maria@gmail.com");
+
+        const correo = new Correo(
+           "Hola a todos",
+           "Reunion",
+           1,
+          [contacto1, contacto2, contacto3],
+          contacto1
+        );
+
+        gestor.enviarCorreo(correo);
+
+        expect(gestor.getEnviados()).toContain(correo);
+    });
 
     test("no permite agregar dos veces el mismo correo a favoritos", () => {
         const gestor = new GestorCorreos();
