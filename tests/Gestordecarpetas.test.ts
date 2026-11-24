@@ -132,4 +132,36 @@ describe("RF-06 gestión de carpetas", () => {
         expect(bandejaUsuario1.obtenerCarpeta("recibidos")).toEqual([correo1]);
         expect(bandejaUsuario2.obtenerCarpeta("recibidos")).toEqual([correo2]);
     });
+    test("cada usuario puede recibir 100 correos en su propia bandeja", () => {
+        const bandejaUsuario1 = new GestorCarpetas();
+        const bandejaUsuario2 = new GestorCarpetas();
+
+        const remitente = new Contacto("Juan Pérez", "juan@gmail.com");
+        const usuario1 = new Contacto("Juana López", "juana@gmail.com");
+        const usuario2 = new Contacto("Pedro Gómez", "pedro@gmail.com");
+
+        for (let i = 1; i <= 100; i++) {
+            const correo1 = new Correo(
+               `Mensaje ${i} para Juana`,
+                `Asunto ${i}`,
+                i,
+                [usuario1],
+                remitente
+            );
+
+            const correo2 = new Correo(
+                `Mensaje ${i} para Pedro`,
+                `Asunto ${i}`,
+                i + 100,
+               [usuario2],
+               remitente
+            );
+
+            bandejaUsuario1.agregarRecibido(correo1);
+            bandejaUsuario2.agregarRecibido(correo2);
+        }
+
+       expect(bandejaUsuario1.obtenerCarpeta("recibidos")).toHaveLength(100);
+       expect(bandejaUsuario2.obtenerCarpeta("recibidos")).toHaveLength(100);
+    }); 
 });
