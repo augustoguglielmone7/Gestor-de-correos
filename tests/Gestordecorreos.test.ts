@@ -3,6 +3,9 @@ import { describe, test, expect } from "vitest";
 import { GestorCorreos } from "../menu.ts/servicios/Gestordecorreos";
 import { Correo } from "../menu.ts/correos/Correos";
 import { Contacto } from "../menu.ts/correos/Contacto";
+import { Filtro, } from "../menu.ts/correos/Filtro";
+import { combinarAND, contieneTexto} from "../menu.ts/servicios/Predicado";
+import { GestorCarpetas } from "../menu.ts/servicios/Gestordecarpetas";
 describe("RF-07: gestión de borradores", () => {
 
     test("permite guardar un borrador incompleto", () => {
@@ -242,4 +245,69 @@ describe("RF-07: gestión de borradores", () => {
        expect(gestor.obtenerFavoritos()).toHaveLength(0);
        expect(gestor.obtenerEnviados()).toHaveLength(1);
    }); 
+   test("envía un correo a 100 personas, lo guarda en sus bandejas y permite filtrarlo", () => {
+     const gestor = new GestorCorreos();
+     const remitente = new Contacto("Juan Pérez", "juan@gmail.com");
+
+     const destinatarios: Contacto[] = [];
+     const bandejas: GestorCarpetas[] = [];
+
+     for (let i = 1; i <= 100; i++) {
+        const destinatario = new Contacto(
+            `Persona ${i}`,
+            `persona${i}@gmail.com`
+        );
+
+        destinatarios.push(destinatario);
+        bandejas.push(new GestorCarpetas());
+     }
+
+     const correo = new Correo(
+        "Información importante",
+        "Reunión general",
+        100,
+        destinatarios,
+        remitente
+     );
+
+    // Guardar y enviar.
+     gestor.guardarBorrador(correo);
+     gestor.enviarCorreo(correo);
+
+    // Distribuir el correo en las bandejas individuales.
+     bandejas.forEach(bandeja => {
+        bandeja.agregarRecibido(correo);
+     });
+
+    // Verificar que los 100 destinatarios lo recibieron.
+     bandejas.forEach(bandeja => {
+        expect(bandeja.obtenerCarpeta("recibidos")).toContain(correo);
+     });
+
+    // Elegir un destinatario.
+     const indice = destinatarios.findIndex(
+        contacto => contacto.getEmail() === "persona57@gmail.com"
+     );
+
+     expect(indice).not.toBe(-1);
+
+     const bandejaElegida = bandejas[indice];
+
+     if (!bandejaElegida) {
+         throw new Error("No se encontró la bandeja del destinatario");
+     }
+
+    // Crear un filtro compuesto.
+     const filtroCompuesto = new Filtro(
+        "Correos importantes de Juan",
+        combinarAND(
+            (c) => c.getRemitente().getEmail() === "juan@gmail.com",
+            contieneTexto("importante")
+        )
+     );
+
+    // Comprobar el filtro y la bandeja individual.
+     expect(filtroCompuesto.aplicar(correo)).toBe(true);
+     expect(bandejaElegida.obtenerCarpeta("recibidos")).toContain(correo);
+   });
 });
