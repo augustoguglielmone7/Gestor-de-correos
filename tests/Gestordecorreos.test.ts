@@ -247,7 +247,7 @@ describe("RF-07: gestión de borradores", () => {
    }); 
    test("envía un correo a 100 personas, lo guarda en sus bandejas y permite filtrarlo", () => {
      const gestor = new GestorCorreos();
-     const remitente = new Contacto("Juan Pérez", "juan@gmail.com");
+     const remitente = new Contacto("Augusto Guglielmone", "Augusto@gmail.com");
 
      const destinatarios: Contacto[] = [];
      const bandejas: GestorCarpetas[] = [];
@@ -299,9 +299,9 @@ describe("RF-07: gestión de borradores", () => {
 
     // Crear un filtro compuesto.
      const filtroCompuesto = new Filtro(
-        "Correos importantes de Juan",
+        "Correos importantes de Augusto",
         combinarAND(
-            (c) => c.getRemitente().getEmail() === "juan@gmail.com",
+            (c) => c.getRemitente().getEmail() === "Augusto@gmail.com",
             contieneTexto("importante")
         )
      );
