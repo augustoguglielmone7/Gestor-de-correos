@@ -161,7 +161,7 @@ describe("RF-07: gestión de borradores", () => {
           [contacto1, contacto2, contacto3],
           contacto1
         );
-
+        gestor.guardarBorrador(correo);
         gestor.enviarCorreo(correo);
 
         expect(gestor.getEnviados()).toContain(correo);

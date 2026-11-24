@@ -164,4 +164,52 @@ describe("RF-06 gestión de carpetas", () => {
        expect(bandejaUsuario1.obtenerCarpeta("recibidos")).toHaveLength(100);
        expect(bandejaUsuario2.obtenerCarpeta("recibidos")).toHaveLength(100);
     }); 
+    test("un correo enviado a tres destinatarios aparece en sus bandejas y se elimina solo para quien lo elimina", () => {
+        const bandejaRemitente = new GestorCarpetas();
+        const bandejaJuana = new GestorCarpetas();
+        const bandejaLuis = new GestorCarpetas();
+        const bandejaMarta = new GestorCarpetas();
+
+        const remitente = new Contacto("Juan Pérez", "juan@gmail.com");
+        const juana = new Contacto("Juana López", "juana@gmail.com");
+        const luis = new Contacto("Luis Gómez", "luis@gmail.com");
+        const marta = new Contacto("Marta Díaz", "marta@gmail.com");
+
+        const correo = new Correo(
+           "Hola a todos",
+           "Reunión",
+            1,
+           [juana, luis, marta],
+           remitente
+       );
+
+    // El remitente lo envía y cada destinatario lo recibe.
+       bandejaRemitente.agregarBorrador(correo);
+       bandejaRemitente.moverA(1, "enviados");
+
+       bandejaJuana.agregarRecibido(correo);
+        bandejaLuis.agregarRecibido(correo);
+       bandejaMarta.agregarRecibido(correo);
+
+    // Se verifica que aparezca en las cuatro bandejas correspondientes.
+       expect(bandejaRemitente.obtenerCarpeta("enviados")).toEqual([correo]);
+       expect(bandejaJuana.obtenerCarpeta("recibidos")).toEqual([correo]);
+       expect(bandejaLuis.obtenerCarpeta("recibidos")).toEqual([correo]);
+       expect(bandejaMarta.obtenerCarpeta("recibidos")).toEqual([correo]);
+
+    // Juana lo agrega a favoritos.
+      correo.setFavorito(true);
+      expect(bandejaJuana.obtenerFavoritos()).toContain(correo);
+
+    // Juana elimina su copia.
+      bandejaJuana.eliminar(1);
+
+      expect(bandejaJuana.obtenerCarpeta("recibidos")).toEqual([]);
+      expect(bandejaJuana.obtenerCarpeta("eliminados")).toEqual([correo]);
+
+    // El correo sigue en las bandejas de Luis, Marta y el remitente.
+      expect(bandejaLuis.obtenerCarpeta("recibidos")).toEqual([correo]);
+      expect(bandejaMarta.obtenerCarpeta("recibidos")).toEqual([correo]);
+      expect(bandejaRemitente.obtenerCarpeta("enviados")).toEqual([correo]);
+    });
 });
